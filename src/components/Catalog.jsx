@@ -1,4 +1,5 @@
-import { BookOpen, ArrowRight } from "lucide-react";
+import { BookOpen, ArrowRight, Plus } from "lucide-react";
+import { useCart } from "./CartContext";
 
 const books = [
   {
@@ -25,6 +26,8 @@ const books = [
 ];
 
 export default function Catalog() {
+  const { addItem } = useCart();
+
   return (
     <section id="catalog" className="relative py-16">
       <div className="mx-auto max-w-7xl px-6">
@@ -47,10 +50,19 @@ export default function Catalog() {
               </div>
               <div className="p-5">
                 <p className="text-sm text-white/70">{b.tagline}</p>
-                <button className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white text-slate-900 px-3 py-2 text-sm font-medium hover:bg-white/90 active:scale-[0.98] transition-all">
-                  <BookOpen className="h-4 w-4" />
-                  Read sample
-                </button>
+                <div className="mt-4 flex items-center gap-3">
+                  <button className="inline-flex items-center gap-2 rounded-xl bg-white text-slate-900 px-3 py-2 text-sm font-medium hover:bg-white/90 active:scale-[0.98] transition-all">
+                    <BookOpen className="h-4 w-4" />
+                    Read sample
+                  </button>
+                  <button
+                    onClick={() => addItem({ id: b.id, title: b.title, author: b.author })}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 text-white px-3 py-2 text-sm font-medium hover:bg-white/10 active:scale-[0.98] transition-all"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add to cart
+                  </button>
+                </div>
               </div>
               <div className="px-5 pb-5 -mt-2">
                 <button className="inline-flex items-center gap-2 text-sm text-white/90 hover:text-white">

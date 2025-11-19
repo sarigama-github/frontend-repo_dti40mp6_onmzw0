@@ -1,6 +1,10 @@
 import { Menu, ShoppingBag, Sparkles } from "lucide-react";
+import { useCart } from "./CartContext";
 
 export default function Navbar() {
+  const { toggle, items } = useCart();
+  const count = items.reduce((a, b) => a + b.qty, 0);
+
   return (
     <header className="fixed top-0 inset-x-0 z-40">
       <div className="mx-auto max-w-7xl px-6">
@@ -17,9 +21,12 @@ export default function Navbar() {
               <a href="#features" className="hover:text-white transition-colors">Why Us</a>
               <a href="#testimonials" className="hover:text-white transition-colors">Stories</a>
             </nav>
-            <button className="inline-flex items-center gap-2 text-sm text-slate-900 font-medium rounded-xl bg-white px-3 py-1.5 hover:bg-white/90 active:scale-[0.98] transition-all">
+            <button onClick={toggle} className="relative inline-flex items-center gap-2 text-sm text-slate-900 font-medium rounded-xl bg-white px-3 py-1.5 hover:bg-white/90 active:scale-[0.98] transition-all">
               <ShoppingBag className="h-4 w-4" />
               Cart
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 h-5 min-w-[20px] px-1 rounded-full bg-emerald-400 text-slate-900 text-xs font-semibold flex items-center justify-center">{count}</span>
+              )}
             </button>
             <button className="md:hidden text-white/80"><Menu className="h-6 w-6" /></button>
           </div>

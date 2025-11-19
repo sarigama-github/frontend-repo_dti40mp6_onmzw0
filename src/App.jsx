@@ -4,8 +4,18 @@ import Features from './components/Features'
 import Catalog from './components/Catalog'
 import Testimonials from './components/Testimonials'
 import Footer from './components/Footer'
+import CartDrawer from './components/CartDrawer'
+import { useCart } from './components/CartContext'
 
 function App() {
+  const { open, closeCart, items, removeItem } = useCart();
+
+  const handleShopNow = () => {
+    closeCart();
+    const el = document.getElementById('catalog');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       {/* Background luxury gradient + subtle grid */}
@@ -22,6 +32,14 @@ function App() {
         <Testimonials />
       </main>
       <Footer />
+
+      <CartDrawer
+        open={open}
+        items={items}
+        onClose={closeCart}
+        onRemoveItem={removeItem}
+        onShopNow={handleShopNow}
+      />
     </div>
   )
 }
