@@ -1,6 +1,8 @@
-import { X, ShoppingCart, Trash2 } from "lucide-react";
+import { X, ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 
-export default function CartDrawer({ open, items = [], onClose, onRemoveItem, onShopNow }) {
+export default function CartDrawer({ open, items = [], onClose, onRemoveItem, onShopNow, onCheckout }) {
+  const subtotal = items.reduce((sum, i) => sum + (i.price || 0) * i.qty, 0);
+
   return (
     <div className={`fixed inset-0 z-50 ${open ? '' : 'pointer-events-none'}`} aria-hidden={!open}>
       {/* Backdrop */}
@@ -44,24 +46,44 @@ export default function CartDrawer({ open, items = [], onClose, onRemoveItem, on
               </button>
             </div>
           ) : (
-            <ul className="space-y-4">
-              {items.map((item) => (
-                <li key={item.id} className="flex items-start justify-between gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
-                  <div>
-                    <p className="text-white font-medium leading-tight">{item.title}</p>
-                    <p className="text-white/60 text-sm">By {item.author}</p>
-                    <p className="text-white/70 text-sm mt-1">Qty: {item.qty}</p>
-                  </div>
-                  <button
-                    onClick={() => onRemoveItem(item.id)}
-                    className="text-white/70 hover:text-white rounded-lg p-2"
-                    aria-label={`Remove ${item.title}`}
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="space-y-4">
+                {items.map((item) => (
+                  <li key={item.id} className="flex items-start justify-between gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+                    <div>
+                      <p className="text-white font-medium leading-tight">{item.title}</p>
+                      <p className="text-white/60 text-sm">By {item.author}</p>
+                      <p className="text-white/70 text-sm mt-1">Qty: {item.qty}</p>
+                      {item.price != null && (
+                        <p className="text-white/80 text-sm mt-1">${(item.price).toFixed(2)} each</p>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => onRemoveItem(item.id)}
+                      className="text-white/70 hover:text-white rounded-lg p-2"
+                      aria-label={`Remove ${item.title}`}
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Summary + Checkout */}
+              <div className="mt-6 border-t border-white/10 pt-4">
+                <div className="flex items-center justify-between text-white/90">
+                  <span className="text-sm">Subtotal</span>
+                  <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                </div>
+                <button
+                  onClick={onCheckout}
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white text-slate-900 px-4 py-2.5 text-sm font-semibold hover:bg-white/90 active:scale-[0.98] transition-all"
+                >
+                  Proceed to checkout
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </>
           )}
         </div>
       </aside>

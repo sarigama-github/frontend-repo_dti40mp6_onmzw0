@@ -6,14 +6,21 @@ import Testimonials from './components/Testimonials'
 import Footer from './components/Footer'
 import CartDrawer from './components/CartDrawer'
 import { useCart } from './components/CartContext'
+import { useNavigate } from 'react-router-dom'
 
 function App() {
   const { open, closeCart, items, removeItem } = useCart();
+  const navigate = useNavigate();
 
   const handleShopNow = () => {
     closeCart();
     const el = document.getElementById('catalog');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleCheckout = () => {
+    closeCart();
+    navigate('/checkout');
   };
 
   return (
@@ -39,6 +46,7 @@ function App() {
         onClose={closeCart}
         onRemoveItem={removeItem}
         onShopNow={handleShopNow}
+        onCheckout={handleCheckout}
       />
     </div>
   )
